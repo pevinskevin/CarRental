@@ -94,7 +94,7 @@ public class CarCRUD {
                 "2. Model\n" +
                 "3. Type of Fuel\n" +
                 "4. License plate\n" +
-                "5. Registration (YYYYMM)\n" +
+                "5. Registration\n" +
                 "6. Mileage\n" +
                 "7. Return to Main Menu\n");
 
