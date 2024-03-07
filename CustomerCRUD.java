@@ -31,13 +31,13 @@ public class CustomerCRUD {
         in.nextLine();
         System.out.println("Phone Number: ");
         int phoneNumber = in.nextInt();
+        in.nextLine();
         System.out.print("Email: ");
         String email = in.nextLine();
-        in.nextLine();
         System.out.println("License Number: ");
         int licenseNumber = in.nextInt();
         in.nextLine();
-        System.out.print("License issue date: ");
+        System.out.print("License issue date (DD-MM-YYYY): ");
         String dateString = in.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate licenseIssueDate = LocalDate.parse(dateString, formatter);
@@ -62,7 +62,7 @@ public class CustomerCRUD {
 
             System.out.println("Customer added successfully.");
         } catch (SQLException e) {
-            System.out.println("EXCEPTION1: " + e.getStackTrace());
+            System.out.println("EXCEPTION1: " + e.getMessage());
         }
     }
     //Read
@@ -115,7 +115,7 @@ public class CustomerCRUD {
                     System.out.println("Name updated to: " + string + "\n");
                     updateCustomerInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 } break;
 
 
@@ -129,7 +129,7 @@ public class CustomerCRUD {
                     System.out.println("Address updated to: " + string + "\n");
                     updateCustomerInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -143,7 +143,7 @@ public class CustomerCRUD {
                     System.out.println("Zipcode updated to: " + number + "\n");
                     updateCustomerInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -157,7 +157,7 @@ public class CustomerCRUD {
                     System.out.println("City updated to: " + string + "\n");
                     updateCustomerInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -171,7 +171,7 @@ public class CustomerCRUD {
                     System.out.println("Mobile Phone number updated to: " + number + "\n");
                     updateCustomerInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -185,7 +185,7 @@ public class CustomerCRUD {
                     System.out.println("Email updated to: " + string + "\n");
                     updateCustomerInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -199,21 +199,20 @@ public class CustomerCRUD {
                     System.out.println("License number updated to: " + number + "\n");
                     updateCustomerInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
-                /*case 8:
+                case 8:
                     System.out.println("Please insert the new license issue date: ");
                     string = scanner.nextLine();
                     try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CUSTOMER SET License_Issue_Date WHERE ID = ?;")) {
-                        updatePs.setString(1, string);
-                        updatePs.setInt(2, customerId);
+                        updatePs.setInt(1, customerId);
                         updatePs.executeUpdate();
                     } catch (SQLException e) {
-                        System.out.println("EXCEPTION: " + e.getStackTrace());
+                        System.out.println("EXCEPTION: " + e.getMessage());
                     }
-                break;*/
+                break;
             case 9:
                 break;
 

@@ -1,3 +1,5 @@
+import java.time.YearMonth;
+
 public class Car {
     private int carID;
     private int carCategoryID;
@@ -5,16 +7,16 @@ public class Car {
     private String model;
     private String typeOfFuel;
     private String licensePlate;
-    private int registrationYYYYMM;
+    private YearMonth registrationDate;
     private int mileage;
 
-    public Car(int carCategoryID, String brand, String model, String typeOfFuel, String licensePlate, int registrationYYYYMM, int mileage) {
+    public Car(int carCategoryID, String brand, String model, String typeOfFuel, String licensePlate, YearMonth registrationDate, int mileage) {
         this.carCategoryID = carCategoryID;
         this.brand = brand;
         this.model = model;
         this.typeOfFuel = typeOfFuel;
         this.licensePlate = licensePlate;
-        this.registrationYYYYMM = registrationYYYYMM;
+        this.registrationDate = registrationDate;
         this.mileage = mileage;
     }
 
@@ -50,12 +52,12 @@ public class Car {
         this.licensePlate = licensePlate;
     }
 
-    public int getRegistrationYYYYMM() {
-        return registrationYYYYMM;
+    public YearMonth getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegistrationYYYYMM(int registrationYYYYMM) {
-        this.registrationYYYYMM = registrationYYYYMM;
+    public void setRegistration(YearMonth registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public int getMileage() {

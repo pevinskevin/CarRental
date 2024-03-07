@@ -25,7 +25,7 @@ public class Main {
                 case UPDATE_CUSTOMER -> customerCrud.updateCustomer();
                 case DELETE_CUSTOMER -> customerCrud.deleteCustomer();
                 case CREATE_CAR -> carCrud.createCar();
-                case READ_CARS -> carCrud.printAllCars();
+                case READ_CARS -> carCrud.printAllCarsFromDb();
                 case UPDATE_CAR -> carCrud.updateCar();
                 case DELETE_CAR -> carCrud.deleteCar();
                 case QUIT -> running = false;

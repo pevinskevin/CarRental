@@ -30,7 +30,7 @@ public class MySqlConnection {
         try {
             connection.close();
         } catch (SQLException e) {
-            System.out.println("EXCEPTION: " + e.getStackTrace());
+            System.out.println("EXCEPTION: " + e.getMessage());
         }
         connection = null;
     }

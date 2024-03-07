@@ -1,6 +1,10 @@
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class CarCRUD {
@@ -27,23 +31,25 @@ public class CarCRUD {
         System.out.println("License plate: ");
         String zipCode = in.nextLine();
         System.out.println("Registration year and month (YYYY-MM): ");
-        int registration = in.nextInt();
-        in.nextLine();
+        String dateString = in.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        YearMonth licenseIssueDate = YearMonth.parse(dateString, formatter);
         System.out.println("Mileage: ");
         int mileage = in.nextInt();
-        Car car = new Car(carCategory, brand, model, typeOfFuel, zipCode, registration, mileage);
+        Car car = new Car(carCategory, brand, model, typeOfFuel, zipCode, licenseIssueDate, mileage);
         createCarInDatabase(car);
     }
     private void createCarInDatabase(Car car) {
         //Takes the Instantiation from createCar as parameter and adds the new customer data to MySQL DB.
         try {
-            String query = "INSERT INTO car (Brand, Model, TypeOfFuel, License_Plate, Registration_YYYY_MM, Mileage, Car_CategoryID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO car (Brand, Model, TypeOfFuel, License_Plate, Registration_Date, Mileage, Car_CategoryID) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = mySqlConnection.getConnection().prepareStatement(query);
             preparedStatement.setString(1, car.getBrand());
             preparedStatement.setString(2, car.getModel());
             preparedStatement.setString(3, car.getTypeOfFuel());
             preparedStatement.setString(4, car.getLicensePlate());
-            preparedStatement.setInt(5, car.getRegistrationYYYYMM());
+            LocalDate date = car.getRegistrationDate().atDay(1);
+            preparedStatement.setDate(5, Date.valueOf(date));
             preparedStatement.setInt(6, car.getMileage());
             preparedStatement.setInt(7, car.getCarCategoryID());
 
@@ -51,40 +57,19 @@ public class CarCRUD {
 
             System.out.println("Car added successfully.");
         } catch (SQLException e) {
-            System.out.println("EXCEPTION: " + e.getStackTrace());
+            System.out.println("EXCEPTION: " + e.getMessage());
             e.printStackTrace();
 
         }
     }
     //Read
-    public void printAllCars() {
-        //Uses the ID-value from mySQLConnection.getHighestCustomerID to print all users in database.
-        int highestID = getHighestCarIdFromDb();
-        for (int i = 0; i < highestID; i++) {
-            printAllCarsFromDb(i + 1);
-        }
-    }
-    private int getHighestCarIdFromDb() {
-        //Find highest ID in Customer Column.
-        try {
-            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT MAX(ID) AS MaxID FROM CAR");
-            ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
-                return resultSet.getInt("MaxID");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return -1; // return -1 or throw an exception if no entry found
-    }
-    private void printAllCarsFromDb(int customerId){
+     void printAllCarsFromDb(){
         //Returns car based on ID as int input.
         try {
-            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CAR WHERE ID = ?;");
-            ps.setInt(1, customerId);  // Set value for the parameter
+            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CAR;");
             ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
-                System.out.println("Car Category: " + resultSet.getInt("Car_CategoryID") + " -- Car ID: " + resultSet.getInt("ID") + " -- Model: " + resultSet.getString("Model") + " -- Brand: " + resultSet.getString("Brand"));
+            while (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
+                System.out.println("Car Category: " + resultSet.getInt("Car_CategoryID") + " -- Car ID: " + resultSet.getInt("ID") + " -- Model: " + resultSet.getString("Model") + " -- Brand: " + resultSet.getString("Brand")  + " -- Registration Date: " + resultSet.getString("Registration_Date"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -124,7 +109,7 @@ public class CarCRUD {
                     System.out.println("Name updated to: " + string + "\n");
                     updateCarInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -139,7 +124,7 @@ public class CarCRUD {
                     System.out.println("Address updated to: " + string + "\n");
                     updateCarInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -153,7 +138,7 @@ public class CarCRUD {
                     System.out.println("Zipcode updated to: " + string + "\n");
                     updateCarInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -167,7 +152,7 @@ public class CarCRUD {
                     System.out.println("City updated to: " + number + "\n");
                     updateCarInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -181,7 +166,7 @@ public class CarCRUD {
                     System.out.println("Mobile Phone string updated to: " + number + "\n");
                     updateCarInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
@@ -195,7 +180,7 @@ public class CarCRUD {
                     System.out.println("Email updated to: " + number + "\n");
                     updateCarInDb(id);
                 } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getStackTrace());
+                    System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
             case 9:
