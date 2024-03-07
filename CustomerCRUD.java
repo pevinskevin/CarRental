@@ -34,14 +34,14 @@ public class CustomerCRUD {
         in.nextLine();
         System.out.print("Email: ");
         String email = in.nextLine();
-        System.out.println("License Number: ");
-        int licenseNumber = in.nextInt();
+        System.out.println("Drivers license Number: ");
+        int driversLicenseNumber = in.nextInt();
         in.nextLine();
-        System.out.print("License issue date (DD-MM-YYYY): ");
+        System.out.print("Drivers license issue date (DD-MM-YYYY): ");
         String dateString = in.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate licenseIssueDate = LocalDate.parse(dateString, formatter);
-        Customer customer = new Customer(fullname, address, zipCode, phoneNumber, email, licenseNumber,licenseIssueDate);
+        LocalDate driverLicenseIssueDate = LocalDate.parse(dateString, formatter);
+        Customer customer = new Customer(fullname, address, zipCode, phoneNumber, email, driversLicenseNumber,driverLicenseIssueDate);
         createCustomerInDb(customer);
 
     }
@@ -55,8 +55,8 @@ public class CustomerCRUD {
             preparedStatement.setInt(3, customer.getZipCode());
             preparedStatement.setInt(4, customer.getPhoneNumber());
             preparedStatement.setString(5, customer.getEmail());
-            preparedStatement.setInt(6, customer.getLicenseNumber());
-            preparedStatement.setDate(7, Date.valueOf(customer.getLicenseIssueDate()));
+            preparedStatement.setInt(6, customer.getDriversLicenseNumber());
+            preparedStatement.setDate(7, Date.valueOf(customer.getDriversLicenseIssueDate()));
 
             preparedStatement.executeUpdate();
 
@@ -72,7 +72,7 @@ public class CustomerCRUD {
             PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CUSTOMER;");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
-                System.out.println("User ID: " + resultSet.getInt("ID") + " -- Name: " + resultSet.getString("Name")+ " -- Address: " + resultSet.getString("Address") + " -- Zipcode: " + resultSet.getInt("Zipcode") + " -- Mobile phone: " + resultSet.getInt("Mobile_phone")+ " -- Email: " + resultSet.getString("Email") + " -- License Number: " + resultSet.getInt("License_number") + " -- License Issue Date: " + resultSet.getDate("License_Issue_Date"));
+                System.out.println("User ID: " + resultSet.getInt("ID") + " -- Name: " + resultSet.getString("Name")+ " -- Address: " + resultSet.getString("Address") + " -- Zipcode: " + resultSet.getInt("Zipcode") + " -- Mobile phone: " + resultSet.getInt("Mobile_phone")+ " -- Email: " + resultSet.getString("Email") + " -- Drivers license Number: " + resultSet.getInt("License_number") + " -- Drivers license Issue Date: " + resultSet.getDate("License_Issue_Date"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -113,7 +113,7 @@ public class CustomerCRUD {
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("Name updated to: " + string + "\n");
-                    updateCustomerInDb(id);
+                    updateCustomerInDb(id); //sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 } break;
@@ -127,7 +127,7 @@ public class CustomerCRUD {
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("Address updated to: " + string + "\n");
-                    updateCustomerInDb(id);
+                    updateCustomerInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -141,7 +141,7 @@ public class CustomerCRUD {
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("Zipcode updated to: " + number + "\n");
-                    updateCustomerInDb(id);
+                    updateCustomerInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -155,7 +155,7 @@ public class CustomerCRUD {
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("City updated to: " + string + "\n");
-                    updateCustomerInDb(id);
+                    updateCustomerInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -169,7 +169,7 @@ public class CustomerCRUD {
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("Mobile Phone number updated to: " + number + "\n");
-                    updateCustomerInDb(id);
+                    updateCustomerInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -183,7 +183,7 @@ public class CustomerCRUD {
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("Email updated to: " + string + "\n");
-                    updateCustomerInDb(id);
+                    updateCustomerInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -197,17 +197,20 @@ public class CustomerCRUD {
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("License number updated to: " + number + "\n");
-                    updateCustomerInDb(id);
+                    updateCustomerInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
                 case 8:
-                    System.out.println("Please insert the new license issue date: ");
-                    string = scanner.nextLine();
-                    try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CUSTOMER SET License_Issue_Date WHERE ID = ?;")) {
-                        updatePs.setInt(1, customerId);
+                    System.out.println("Please insert the new license issue date (DD-MM-YYYY): ");
+                    String dateString = scanner.nextLine();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                    LocalDate driverLicenseIssueDate = LocalDate.parse(dateString, formatter);
+                    try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CUSTOMER SET License_Issue_Date = ? WHERE ID = ?;")) {
+                        updatePs.setDate(1, Date.valueOf(driverLicenseIssueDate));
+                        updatePs.setInt(2, id);
                         updatePs.executeUpdate();
                     } catch (SQLException e) {
                         System.out.println("EXCEPTION: " + e.getMessage());

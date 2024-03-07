@@ -8,28 +8,28 @@ public class Customer {
     private String city;
     private int phoneNumber;
     private String email;
-    private int licenseNumber;
-    private LocalDate licenseIssueDate;
+    private int driversLicenseNumber;
+    private LocalDate driversLicenseIssueDate;
 
-    public Customer(String name, String address, int zipCode, int phoneNumber, String email, int licenseNumber, LocalDate licenseIssueDate) {
+    public Customer(String name, String address, int zipCode, int phoneNumber, String email, int driversLicenseNumber, LocalDate driversLicenseIssueDate) {
         this.name = name;
         this.address = address;
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.licenseNumber = licenseNumber;
-        this.licenseIssueDate = licenseIssueDate;
+        this.driversLicenseNumber = driversLicenseNumber;
+        this.driversLicenseIssueDate = driversLicenseIssueDate;
     }
 
-    public Customer(int customerID, String name, String address, int zipCode, int phoneNumber, String email, int licenseNumber, LocalDate licenseIssueDate) {
+    public Customer(int customerID, String name, String address, int zipCode, int phoneNumber, String email, int driversLicenseNumber, LocalDate driversLicenseIssueDate) {
         this.customerID = customerID;
         this.name = name;
         this.address = address;
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.licenseNumber = licenseNumber;
-        this.licenseIssueDate = licenseIssueDate;
+        this.driversLicenseNumber = driversLicenseNumber;
+        this.driversLicenseIssueDate = driversLicenseIssueDate;
     }
 
     public void setName(String name) {
@@ -56,12 +56,12 @@ public class Customer {
         this.email = email;
     }
 
-    public void setLicenseNumber(int licenseNumber) {
-        this.licenseNumber = licenseNumber;
+    public void setDriversLicenseNumber(int driversLicenseNumber) {
+        this.driversLicenseNumber = driversLicenseNumber;
     }
 
-    public void setLicenseIssueDate(LocalDate licenseIssueDate) {
-        this.licenseIssueDate = licenseIssueDate;
+    public void setDriversLicenseIssueDate(LocalDate driversLicenseIssueDate) {
+        this.driversLicenseIssueDate = driversLicenseIssueDate;
     }
 
     public int getCustomerID() {
@@ -92,11 +92,11 @@ public class Customer {
         return email;
     }
 
-    public int getLicenseNumber() {
-        return licenseNumber;
+    public int getDriversLicenseNumber() {
+        return driversLicenseNumber;
     }
 
-    public LocalDate getLicenseIssueDate() {
-        return licenseIssueDate;
+    public LocalDate getDriversLicenseIssueDate() {
+        return driversLicenseIssueDate;
     }
 }

@@ -48,6 +48,9 @@ public class CarCRUD {
             preparedStatement.setString(2, car.getModel());
             preparedStatement.setString(3, car.getTypeOfFuel());
             preparedStatement.setString(4, car.getLicensePlate());
+            //Man kan ikke bruge YearMonth - den konvertes til en string forneden hvor der tilføjes en dag
+            //dvs. outputtet bliver til YYYY-MM-01 -- metoden nedenfor sætter altid dagen som 01.
+            //Så uanset hvilken måned og dag du indtaster, så vil outputte ti MySQL altid være YYYY-MM-01.
             LocalDate date = car.getRegistrationDate().atDay(1);
             preparedStatement.setDate(5, Date.valueOf(date));
             preparedStatement.setInt(6, car.getMileage());
@@ -69,7 +72,7 @@ public class CarCRUD {
             PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CAR;");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
-                System.out.println("Car Category: " + resultSet.getInt("Car_CategoryID") + " -- Car ID: " + resultSet.getInt("ID") + " -- Model: " + resultSet.getString("Model") + " -- Brand: " + resultSet.getString("Brand")  + " -- Registration Date: " + resultSet.getString("Registration_Date"));
+                System.out.println("Car Category: " + resultSet.getInt("Car_CategoryID") + " -- Car ID: " + resultSet.getInt("ID") + " -- Model: " + resultSet.getString("Model") + " -- Brand: " + resultSet.getString("Brand")  + " -- Registration Date: " + resultSet.getString("Registration_Date")  + " -- License plate: " + resultSet.getString("License_Plate")  + " -- Mileage: " + resultSet.getString("Mileage"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -78,7 +81,7 @@ public class CarCRUD {
     //Update
     void updateCar() {
         //Inputs the ID of car that needs editing.
-        System.out.println("Please input the ID of the user you wish to edit: ");
+        System.out.println("Please input the ID of the car you wish to edit: ");
         Scanner scanner = new Scanner(System.in);
         int userInput = scanner.nextInt();
         Customer customer = updateCarInDb(userInput);
@@ -106,8 +109,8 @@ public class CarCRUD {
                     updatePs.setString(1, string);
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
-                    System.out.println("Name updated to: " + string + "\n");
-                    updateCarInDb(id);
+                    System.out.println("Car brand updated to: " + string + "\n");
+                    updateCarInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -121,8 +124,8 @@ public class CarCRUD {
                     updatePs.setString(1, string);
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
-                    System.out.println("Address updated to: " + string + "\n");
-                    updateCarInDb(id);
+                    System.out.println("Car model updated to: " + string + "\n");
+                    updateCarInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -135,8 +138,8 @@ public class CarCRUD {
                     updatePs.setString(1, string);
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
-                    System.out.println("Zipcode updated to: " + string + "\n");
-                    updateCarInDb(id);
+                    System.out.println("Type of fuel updated to: " + string + "\n");
+                    updateCarInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -144,27 +147,29 @@ public class CarCRUD {
 
             case 4:
                 System.out.println("Please insert the license plate: ");
-                int number = scanner.nextInt();
+                string = scanner.nextLine();
                 try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CAR SET License_plate = ? WHERE ID = ?;")) {
-                    updatePs.setInt(1, number);
+                    updatePs.setString(1, string);
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
-                    System.out.println("City updated to: " + number + "\n");
-                    updateCarInDb(id);
+                    System.out.println("License plae updated to: " + string + "\n");
+                    updateCarInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
                 break;
 
             case 5:
-                System.out.println("Please insert the registration (YYYYMM): ");
-                number = scanner.nextInt();
-                try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CAR SET Registration_YYYY_MM = ? WHERE ID = ?;")) {
-                    updatePs.setInt(1, number);
+                System.out.println("Please insert the registration (YYYY-MM): ");
+                String dateString = scanner.nextLine();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+                YearMonth regDate = YearMonth.parse(dateString, formatter);
+                LocalDate date = regDate.atDay(1);
+                try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CAR SET Registration_Date = ? WHERE ID = ?;")) {
+                    updatePs.setDate(1, Date.valueOf(date));
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
-                    System.out.println("Mobile Phone string updated to: " + number + "\n");
-                    updateCarInDb(id);
+                    updateCarInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
@@ -172,13 +177,13 @@ public class CarCRUD {
 
             case 6:
                 System.out.println("Please insert the car mileage: ");
-                number = scanner.nextInt();
+                int number = scanner.nextInt();
                 try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CAR SET Mileage = ? WHERE ID = ?;")) {
                     updatePs.setInt(1, number);
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
                     System.out.println("Email updated to: " + number + "\n");
-                    updateCarInDb(id);
+                    updateCarInDb(id);//sender tilbage til edit-menuen
                 } catch (SQLException e) {
                     System.out.println("EXCEPTION: " + e.getMessage());
                 }
