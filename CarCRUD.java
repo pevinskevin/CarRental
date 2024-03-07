@@ -29,14 +29,14 @@ public class CarCRUD {
         System.out.println("Type of Fuel: ");
         String typeOfFuel = in.nextLine();
         System.out.println("License plate: ");
-        String zipCode = in.nextLine();
+        String licensePlate = in.nextLine();
         System.out.println("Registration year and month (YYYY-MM): ");
         String dateString = in.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         YearMonth licenseIssueDate = YearMonth.parse(dateString, formatter);
         System.out.println("Mileage: ");
         int mileage = in.nextInt();
-        Car car = new Car(carCategory, brand, model, typeOfFuel, zipCode, licenseIssueDate, mileage);
+        Car car = new Car(carCategory, brand, model, typeOfFuel, licensePlate, licenseIssueDate, mileage);
         createCarInDatabase(car);
     }
     private void createCarInDatabase(Car car) {
