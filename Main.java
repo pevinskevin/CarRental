@@ -21,7 +21,7 @@ public class Main {
             MenuChoice menuChoice = showMainMenu();
             switch (menuChoice) {
                 case CREATE_CUSTOMER -> customerCrud.createCustomer();
-                case READ_CUSTOMERS -> customerCrud.printAllCustomers();
+                case READ_CUSTOMERS -> customerCrud.printAllCustomersFromDb();
                 case UPDATE_CUSTOMER -> customerCrud.updateCustomer();
                 case DELETE_CUSTOMER -> customerCrud.deleteCustomer();
                 case CREATE_CAR -> carCrud.createCar();

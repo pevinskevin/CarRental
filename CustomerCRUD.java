@@ -66,31 +66,10 @@ public class CustomerCRUD {
         }
     }
     //Read
-    public void printAllCustomers() {
-        //Uses the ID-value from getHighestCustomerID to print all users in database.
-        int highestID = getHighestCustomerIdFromDb();
-        for (int i = 0; i < highestID; i++) {
-            printAllCustomersFromDb(i + 1);
-        }
-    }
-    private int getHighestCustomerIdFromDb() {
-        //Finds the highest ID in Customer Column.
-        try {
-            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT MAX(ID) AS MaxID FROM CUSTOMER");
-            ResultSet resultSet = ps.executeQuery();
-            if (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
-                return resultSet.getInt("MaxID");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return -1; // return -1 or throw an exception if no entry found
-    }
-    private void printAllCustomersFromDb(int customerId){
+    public void printAllCustomersFromDb(){
         //Returns customer based on ID as int input.
         try {
-            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CUSTOMER WHERE ID = ?;");
-            ps.setInt(1, customerId);  // Set value for the parameter
+            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CUSTOMER;");
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
                 System.out.println("User ID: " + resultSet.getInt("ID") + " -- Name: " + resultSet.getString("Name")+ " -- Address: " + resultSet.getString("Address") + " -- Zipcode: " + resultSet.getInt("Zipcode") + " -- Mobile phone: " + resultSet.getInt("Mobile_phone")+ " -- Email: " + resultSet.getString("Email") + " -- License Number: " + resultSet.getInt("License_number") + " -- License Issue Date: " + resultSet.getDate("License_Issue_Date"));
