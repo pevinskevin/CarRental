@@ -71,7 +71,7 @@ public class CustomerCRUD {
         try {
             PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CUSTOMER;");
             ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
+            while (resultSet.next()) { // Er baseret på: https://youtu.be/KgXq2UBNEhA?si=oti3JOGnJhBqZv3p&t=823
                 System.out.println("User ID: " + resultSet.getInt("ID") + " -- Name: " + resultSet.getString("Name")+ " -- Address: " + resultSet.getString("Address") + " -- Zipcode: " + resultSet.getInt("Zipcode") + " -- Mobile phone: " + resultSet.getInt("Mobile_phone")+ " -- Email: " + resultSet.getString("Email") + " -- Drivers license Number: " + resultSet.getInt("License_number") + " -- Drivers license Issue Date: " + resultSet.getDate("License_Issue_Date"));
             }
         } catch (SQLException e) {
