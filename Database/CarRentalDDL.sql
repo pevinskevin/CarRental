@@ -39,7 +39,6 @@ CREATE TABLE Customer (
                           CONSTRAINT Customer_pk PRIMARY KEY (ID),
                           CONSTRAINT zipcode_fk FOREIGN KEY (Zipcode) REFERENCES zipcode_city (zipcode)
 );
-
 CREATE TABLE Contract (
                           ID INT(10) NOT NULL AUTO_INCREMENT,
                           CustomerID INT(10) NOT NULL,
@@ -53,6 +52,7 @@ CREATE TABLE Contract (
 );
 
 INSERT INTO zipcode_city (zipcode, city) VALUES
+                                             (0000, 'Deleted'),
                                              (1000, 'Copenhagen'),
                                              (1050, 'Copenhagen K'),
                                              (1100, 'Copenhagen V'),

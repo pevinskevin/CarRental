@@ -239,10 +239,10 @@ public class CustomerCRUD {
         } else System.out.println("Deletion cancelled");
     }
     private void deleteCustomerFromDb(int customerId) {
-        //Deletes customer with ID = parameter.
-        try (PreparedStatement deletePS = mySqlConnection.getConnection().prepareStatement("DELETE FROM customer WHERE ID = ?")) {
-            deletePS.setInt(1, customerId);
-            deletePS.executeUpdate();
+        //Deletes customer (by replacing all of its data with nonsense) with ID = parameter.
+        try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE Customer SET Name = 'DELETED', Address = 'DELETED', Zipcode = 0000, Mobile_phone = 11111111, Email = 'deleted@deleted.com', License_Number = 111111111, License_Issue_Date = '2000-01-01' WHERE ID = ?;")) {
+            updatePs.setInt(1, customerId);
+            updatePs.executeUpdate();
             System.out.println("User successfully deleted.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
