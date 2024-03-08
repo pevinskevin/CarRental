@@ -1,4 +1,4 @@
-Drop Database if exists CarRental;
+Drop SQL-Scripts if exists CarRental;
 CREATE DATABASE IF NOT EXISTS CarRental;
 
 USE CarRental;
