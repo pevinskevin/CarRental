@@ -69,10 +69,17 @@ public class CustomerCRUD {
     public void printAllCustomersFromDb(){
         //Returns customer based on ID as int input.
         try {
-            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CUSTOMER;");
+            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement
+                    ("Select * From Customer join zipcode_city on customer.zipcode = zipcode_city.zipcode;");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) { // Er baseret på: https://youtu.be/KgXq2UBNEhA?si=oti3JOGnJhBqZv3p&t=823
-                System.out.println("User ID: " + resultSet.getInt("ID") + " -- Name: " + resultSet.getString("Name")+ " -- Address: " + resultSet.getString("Address") + " -- Zipcode: " + resultSet.getInt("Zipcode") + " -- Mobile phone: " + resultSet.getInt("Mobile_phone")+ " -- Email: " + resultSet.getString("Email") + " -- Drivers license Number: " + resultSet.getInt("License_number") + " -- Drivers license Issue Date: " + resultSet.getDate("License_Issue_Date"));
+                System.out.println("User ID: " + resultSet.getInt("ID") + " -- Name: " + resultSet.getString("Name")
+                        + " -- Address: " + resultSet.getString("Address") + " -- Zipcode: " + resultSet.getInt("Zipcode")
+                        + " -- City: " + resultSet.getString("City")
+                        + " -- Mobile phone: " + resultSet.getInt("Mobile_phone")+ " -- Email: "
+                        + resultSet.getString("Email") + " -- Drivers license Number: "
+                        + resultSet.getInt("License_number") + " -- Drivers license Issue Date: "
+                        + resultSet.getDate("License_Issue_Date"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -94,12 +101,11 @@ public class CustomerCRUD {
                 "1. Name\n" +
                 "2. Adress\n" +
                 "3. Zipcode\n" +
-                "4. City\n" +
-                "5. Phone number\n" +
-                "6. E-mail\n" +
-                "7. License number\n" +
-                "8. License issue date\n" +
-                "9. Return to main menu");
+                "4. Phone number\n" +
+                "5. E-mail\n" +
+                "6. License number\n" +
+                "7. License issue date\n" +
+                "8. Return to main menu");
 
         Scanner scanner = new Scanner(System.in);
         int num = scanner.nextInt();
@@ -148,20 +154,6 @@ public class CustomerCRUD {
                 break;
 
             case 4:
-                System.out.println("Please insert the new city: ");
-                string = scanner.nextLine();
-                try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CUSTOMER SET City = ? WHERE ID = ?;")) {
-                    updatePs.setString(1, string);
-                    updatePs.setInt(2, customerId);
-                    updatePs.executeUpdate();
-                    System.out.println("City updated to: " + string + "\n");
-                    updateCustomerInDb(id);//sender tilbage til edit-menuen
-                } catch (SQLException e) {
-                    System.out.println("EXCEPTION: " + e.getMessage());
-                }
-                break;
-
-            case 5:
                 System.out.println("Please insert the new phone number: ");
                 number = scanner.nextInt();
                 try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CUSTOMER SET Mobile_phone = ? WHERE ID = ?;")) {
@@ -175,7 +167,7 @@ public class CustomerCRUD {
                 }
                 break;
 
-            case 6:
+            case 5:
                 System.out.println("Please insert the new email: ");
                 string = scanner.nextLine();
                 try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CUSTOMER SET Email = ? WHERE ID = ?;")) {
@@ -189,10 +181,11 @@ public class CustomerCRUD {
                 }
                 break;
 
-            case 7:
+            case 6:
                 System.out.println("Please insert the new license number: ");
                 number = scanner.nextInt();
-                try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE CUSTOMER SET License_number = ? WHERE ID = ?;")) {
+                try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement(
+                        "UPDATE CUSTOMER SET License_number = ? WHERE ID = ?;")) {
                     updatePs.setInt(1, number);
                     updatePs.setInt(2, customerId);
                     updatePs.executeUpdate();
@@ -203,7 +196,7 @@ public class CustomerCRUD {
                 }
                 break;
 
-                case 8:
+                case 7:
                     System.out.println("Please insert the new license issue date (DD-MM-YYYY): ");
                     String dateString = scanner.nextLine();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -216,7 +209,7 @@ public class CustomerCRUD {
                         System.out.println("EXCEPTION: " + e.getMessage());
                     }
                 break;
-            case 9:
+            case 8:
                 break;
 
         }
@@ -240,7 +233,7 @@ public class CustomerCRUD {
     }
     private void deleteCustomerFromDb(int customerId) {
         //Deletes customer (by replacing all of its data with nonsense) with ID = parameter.
-        try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("UPDATE Customer SET Name = 'DELETED', Address = 'DELETED', Zipcode = 0000, Mobile_phone = 11111111, Email = 'deleted@deleted.com', License_Number = 111111111, License_Issue_Date = '2000-01-01' WHERE ID = ?;")) {
+        try (PreparedStatement updatePs = mySqlConnection.getConnection().prepareStatement("Delete from customer where id = ?;")) {
             updatePs.setInt(1, customerId);
             updatePs.executeUpdate();
             System.out.println("User successfully deleted.");
