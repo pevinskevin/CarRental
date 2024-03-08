@@ -42,7 +42,7 @@ public class CarCRUD {
     private void createCarInDatabase(Car car) {
         //Takes the Instantiation from createCar as parameter and adds the new customer data to MySQL DB.
         try {
-            String query = "INSERT INTO car (Brand, Model, TypeOfFuel, License_Plate, Registration_Date, Mileage, Car_CategoryID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Car (Brand, Model, TypeOfFuel, License_Plate, Registration_Date, Mileage, Car_CategoryID) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = mySqlConnection.getConnection().prepareStatement(query);
             preparedStatement.setString(1, car.getBrand());
             preparedStatement.setString(2, car.getModel());
@@ -66,10 +66,10 @@ public class CarCRUD {
         }
     }
     //Read
-     void printAllCarsFromDb(){
+     public void printAllCarsFromDb(){
         //Returns car based on ID as int input.
         try {
-            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM CAR;");
+            PreparedStatement ps = mySqlConnection.getConnection().prepareStatement("SELECT * FROM Car;");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) { // use 'if', not 'while', because MAX() returns only one row
                 System.out.println("Car Category: " + resultSet.getInt("Car_CategoryID") + " -- Car ID: " + resultSet.getInt("ID") + " -- Model: " + resultSet.getString("Model") + " -- Brand: " + resultSet.getString("Brand")  + " -- Registration Date: " + resultSet.getString("Registration_Date")  + " -- License plate: " + resultSet.getString("License_Plate")  + " -- Mileage: " + resultSet.getString("Mileage"));
@@ -79,7 +79,7 @@ public class CarCRUD {
         }
     }
     //Update
-    void updateCar() {
+    public void updateCar() {
         //Inputs the ID of car that needs editing.
         System.out.println("Please input the ID of the car you wish to edit: ");
         Scanner scanner = new Scanner(System.in);
@@ -195,7 +195,7 @@ public class CarCRUD {
     }
     //Delete
     //Currently unable to delete car with contracts in DB.
-    void deleteCar() {
+    public void deleteCar() {
         //Takes ID as input which is used as int argument for deleteCarFromDb
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the ID of the car you wish to delete: ");

@@ -87,7 +87,7 @@ public class CustomerCRUD {
     }
 
     //Update
-    void updateCustomer() {
+    public void updateCustomer() {
         //Inputs the ID of user that needs editing.
         System.out.println("Please input the ID of the user you wish to edit: ");
         Scanner scanner = new Scanner(System.in);
@@ -217,7 +217,7 @@ public class CustomerCRUD {
 
     //Delete
     //Currently unable to delete customers with contracts in DB.
-    void deleteCustomer() {
+    public void deleteCustomer() {
         //Takes ID as input which is used as int argument for deleteCustomerFromDb
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the ID of the customer you wish to delete: ");
