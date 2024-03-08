@@ -8,6 +8,8 @@ public class Customer {
     private String city;
     private int phoneNumber;
     private String email;
+    //har æændret navnet fra license number så det ikke blandes sammen med license plate fra carCRUD.
+    //Det kom jeg til at gøre adskillelige gange.
     private int driversLicenseNumber;
     private LocalDate driversLicenseIssueDate;
 
